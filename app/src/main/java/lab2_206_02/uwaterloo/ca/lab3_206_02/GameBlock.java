@@ -18,7 +18,11 @@ public class GameBlock extends android.support.v7.widget.AppCompatImageView {
     //location where the block should be at in y
     private int Ygoal = 0;
     //the speed in which the block should move
-    private int velocity = 20;
+    private final int initialvelocity = 1;
+    //velocity
+    private int velocity = 1;
+    //acceleration
+    private int acceleration = 6;
     //the local copy of the relative layout
     public RelativeLayout relativelay;
     //the square imageview
@@ -55,7 +59,7 @@ public class GameBlock extends android.support.v7.widget.AppCompatImageView {
                 //if the square is not on the first row then
                 if (myCorrdY > 0){
                     //set the desired location to be one up
-                    Ygoal -=180;
+                    Ygoal =0;
                 }
                 break;
             //when down
@@ -63,7 +67,7 @@ public class GameBlock extends android.support.v7.widget.AppCompatImageView {
                 //is the square is not on the last row then
                 if (myCorrdY< 540){
                     //set the desired location to be one down
-                    Ygoal += 180;
+                    Ygoal = 540;
                 }
                 break;
             // when right
@@ -71,7 +75,7 @@ public class GameBlock extends android.support.v7.widget.AppCompatImageView {
                 //if the square is not at the last colom then
                 if(myCoordX < 540){
                     //set the desired location to be one to square to the right
-                    Xgoal += 180;
+                    Xgoal = 540;
                 }
                 break;
             //when left
@@ -79,7 +83,7 @@ public class GameBlock extends android.support.v7.widget.AppCompatImageView {
                 //if the square is not on the the first colom
                 if(myCoordX > 0){
                     //then set the disired location to be one colom to the left
-                    Xgoal -= 180;
+                    Xgoal = 0;
                 }
                 break;
             default:
@@ -90,37 +94,67 @@ public class GameBlock extends android.support.v7.widget.AppCompatImageView {
         //if the current y location is not the same as the disired y location
         if(myCorrdY != Ygoal){
             //is the current y location is less then the desired y location
-            if(myCorrdY < Ygoal){
+            //DOWN
+            if(myCorrdY + velocity + acceleration < Ygoal){
+                velocity += acceleration;
                 //keep sending the square down at the speed of velocity
                 myCorrdY += velocity;
+
                 //update the location of the image view
                 image.setY(myCorrdY);
                 //in the x and y
                 image.setX(myCoordX);
+                //velocity += acceleration;
             }
+
+            //UP
             //case where the current location is greater than desired location
-            else if(myCorrdY > Ygoal){
+            else if(myCorrdY - velocity - acceleration > Ygoal){
                 //keep sending the current y direction up to disired location
                 myCorrdY -= velocity;
+                velocity += acceleration;
                 //update location
                 image.setY(myCorrdY);
                 image.setX(myCoordX);
+                //velocity += acceleration;
+            }
+            else{
+                //update the location of the image view
+                image.setY(Ygoal);
+                //in the x and y
+                image.setX(myCoordX);
+                velocity = initialvelocity;
+                myCorrdY = Ygoal;
             }
         }
+
 
         //get to the desired location of the square in the x axis
         //same as above but for y
         if(myCoordX != Xgoal){
-            if(myCoordX < Xgoal){
+            //RIGHT
+            if(myCoordX + velocity + acceleration < Xgoal){
+                velocity += acceleration;
                 myCoordX += velocity;
-                image.setY(myCorrdY);
+                //image.setY(myCorrdY);
                 image.setX(myCoordX);
+                //velocity+= acceleration;
             }
             //the second casex
-            else if(myCoordX > Xgoal){
+            else if(myCoordX - velocity - acceleration > Xgoal){
+                velocity += acceleration;
                 myCoordX -= velocity;
-                image.setY(myCorrdY);
+                //image.setY(myCorrdY);
                 image.setX(myCoordX);
+                //velocity += acceleration;
+            }
+            else{
+                //update the location of the image view
+                //image.setY(myCorrdY);
+                //in the x and y
+                image.setX(Xgoal);
+                velocity = initialvelocity;
+                myCoordX = Xgoal;
             }
         }
     }
